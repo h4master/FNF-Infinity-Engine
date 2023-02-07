@@ -626,17 +626,17 @@ class TitleState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'), 0);
 					FlxG.sound.music.fadeIn(4, 0, 0.7);
 				case 2:
-					#if PSYCH_WATERMARKS
-					createCoolText(['Psych Engine by'], 15);
+					#if INF_WATERMARKS
+					createCoolText(['Inifnity Engine by'], 15);
 					#else
 					createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
 					#end
 				// credTextShit.visible = true;
 				case 4:
-					#if PSYCH_WATERMARKS
-					addMoreText('Shadow Mario', 15);
-					addMoreText('RiverOaken', 15);
-					addMoreText('shubs', 15);
+					#if INF_WATERMARKS
+					addMoreText('h4mster', 15);
+					addMoreText('Kriptel Pro', 15);
+					addMoreText('Electro Pea', 15);
 					#else
 					addMoreText('present');
 					#end
@@ -648,14 +648,18 @@ class TitleState extends MusicBeatState
 				// credTextShit.text = 'In association \nwith';
 				// credTextShit.screenCenter();
 				case 6:
-					#if PSYCH_WATERMARKS
-					createCoolText(['Not associated', 'with'], -40);
+					#if INF_WATERMARKS
+					createCoolText(['forked', 'from'], -40);
 					#else
 					createCoolText(['In association', 'with'], -40);
 					#end
 				case 8:
+					#if INF_WATERMARKS
+					addMoreText('Psych Engine', 15);
+					#else
 					addMoreText('newgrounds', -40);
 					ngSpr.visible = true;
+					#end
 				// credTextShit.text += '\nNewgrounds';
 				case 9:
 					deleteCoolText();
