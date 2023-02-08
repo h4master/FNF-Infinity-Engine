@@ -23,7 +23,7 @@ class MusicBeatSubstate extends FlxSubState
 	private var curDecBeat:Float = 0;
 	private var controls(get, never):Controls;
 
-	private var lastAddState:MusicBeatAddState = null;
+	private var lastAddState:MusicBeatAddstate = null;
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
@@ -69,7 +69,7 @@ class MusicBeatSubstate extends FlxSubState
 		//do literally nothing dumbass
 	}
 
-	public function openAddState(addState:MusicBeatAddState)
+	public function openAddState(addState:MusicBeatAddstate)
 	{
 		lastAddState = addState;
 		add(lastAddState);

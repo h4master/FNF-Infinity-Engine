@@ -34,7 +34,7 @@ class MusicBeatState extends FlxUIState
 
 	public static var camBeat:FlxCamera;
 
-	private var lastAddState:MusicBeatAddState = null;
+	private var lastAddState:MusicBeatAddstate = null;
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
@@ -178,7 +178,7 @@ class MusicBeatState extends FlxUIState
 		return val == null ? 4 : val;
 	}
 
-	public function openAddState(addState:MusicBeatAddState)
+	public function openAddState(addState:MusicBeatAddstate)
 	{
 		lastAddState = addState;
 		add(lastAddState);

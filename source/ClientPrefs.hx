@@ -11,6 +11,7 @@ class ClientPrefs {
 	public static var middleScroll:Bool = false;
 	public static var opponentStrums:Bool = true;
 	public static var showFPS:Bool = true;
+	public static var outlineFPS:Bool = true;
 	public static var flashing:Bool = true;
 	public static var globalAntialiasing:Bool = true;
 	public static var noteSplashes:Bool = true;
@@ -98,6 +99,7 @@ class ClientPrefs {
 		Paths.save.data.middleScroll = middleScroll;
 		Paths.save.data.opponentStrums = opponentStrums;
 		Paths.save.data.showFPS = showFPS;
+		Paths.save.data.outlineFPS = outlineFPS;
 		Paths.save.data.flashing = flashing;
 		Paths.save.data.globalAntialiasing = globalAntialiasing;
 		Paths.save.data.noteSplashes = noteSplashes;
@@ -149,6 +151,8 @@ class ClientPrefs {
 				Main.fpsVar.visible = showFPS;
 			}
 		}
+		if(Paths.save.data.outlineFPS != null)
+			outlineFPS = Paths.save.data.outlineFPS;
 		if(Paths.save.data.flashing != null)
 			flashing = Paths.save.data.flashing;
 		if(Paths.save.data.globalAntialiasing != null)

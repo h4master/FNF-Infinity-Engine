@@ -121,7 +121,7 @@ class HScriptHandler
 			['MenuCharacter'],
 			['MenuItem'],
 			['ModsMenuState'],
-			['MusicBeatAddstate']
+			['MusicBeatAddstate'],
 			['MusicBeatState'],
 			['MusicBeatSubstate'],
 			['Note'],

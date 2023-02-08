@@ -6,7 +6,7 @@ import Conductor.BPMChangeEvent;
 import flixel.FlxG;
 import flixel.FlxSprite;
 
-class MusicBeatAddState extends FlxTypedGroup<FlxBasic>
+class MusicBeatAddstate extends FlxTypedGroup<FlxBasic>
 {
     public function new() {
         super();
