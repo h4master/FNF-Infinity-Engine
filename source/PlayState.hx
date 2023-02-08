@@ -3337,8 +3337,10 @@ class PlayState extends MusicBeatState
 
 		callHScript(CALLBACK, 'curStep', curStep);
 		callHScript(CALLBACK, 'curBeat', curBeat);
+		callHScript(CALLBACK, 'curSection', curSection);
 		callHScript(CALLBACK, 'curDecStep', curDecStep);
 		callHScript(CALLBACK, 'curDecBeat', curDecBeat);
+		callHScript(CALLBACK, 'curDecSection', curDecSection);
 		callHScript(FUNCTION, 'update', [elapsed]);
 	}
 

@@ -107,6 +107,7 @@ class HScriptHandler
 			['DialogueBox'],
 			['DialogueBoxPsych'],
 			['Discord'],
+			['EternalFunctions'],
 			['FlashingState'],
 			['FlxUIDropDownMenuCustom'],
 			['FreeplayState'],
@@ -120,7 +121,9 @@ class HScriptHandler
 			['MenuCharacter'],
 			['MenuItem'],
 			['ModsMenuState'],
+			['MusicBeatAddstate']
 			['MusicBeatState'],
+			['MusicBeatSubstate'],
 			['Note'],
 			['NoteSplash'],
 			['OutdatedState'],
