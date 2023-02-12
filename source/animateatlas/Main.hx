@@ -90,7 +90,7 @@ class Main extends Sprite {
 			trace(spriteSymbols.length);
 		}
 	}
-
+ 
 	public function addTileGirl(_) {
 		for (i in 0...1) {
 			var t = aa.createAnimation();
