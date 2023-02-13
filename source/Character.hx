@@ -370,7 +370,7 @@ class Character extends FlxSprite
 	
 	function loadMappedAnims():Void
 	{
-		var noteData:Array<SwagSection> = EternalFunctions.getSong('picospeaker').notes;
+		var noteData:Array<SwagSection> = CoolUtil.getSwagSong('picospeaker').notes;
 		for (section in noteData) {
 			for (songNotes in section.sectionNotes) {
 				animationNotes.push(songNotes);

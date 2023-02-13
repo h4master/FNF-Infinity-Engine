@@ -86,15 +86,14 @@ class CreditsState extends MusicBeatState
 			['Kriptel Pro',			'kriptel',					'Additional Programmer',										'',										'5E2129'],
 			['Electro Pea',			'electric',					'Another one Programmer',										'',										'01DEFE'],
 			[''],
-			['Psych Engine Team'],
+			['Special Thanks'],
+			['Cross',				'x',						'Suspicious Night Hunkin\' director',							'https://discord.gg/PtJ4M4wCFq',		'FFFFFF'],
+			[''],
+			['Other'],
 			['Shadow Mario',		'psych/shadowmario',		'Main Programmer of Psych Engine',								'https://twitter.com/Shadow_Mario_',	'444444'],
 			['RiverOaken',			'psych/river',				'Main Artist/Animator of Psych Engine',							'https://twitter.com/RiverOaken',		'B42F71'],
 			['shubs',				'psych/shubs',				'Additional Programmer of Psych Engine',						'https://twitter.com/yoshubs',			'5E99DF'],
-			[''],
-			['Former Engine Members'],
 			['bb-panzu',			'psych/bb',					'Ex-Programmer of Psych Engine',								'https://twitter.com/bbsub3',			'3E813A'],
-			[''],
-			['Engine Contributors'],
 			['iFlicky',				'psych/flicky',				'Composer of Psync and Tea Time\nMade the Dialogue Sounds',		'https://twitter.com/flicky_i',			'9E29CF'],
 			['SqirraRNG',			'psych/sqirra',				'Crash Handler and Base code for\nChart Editor\'s Waveform',	'https://twitter.com/gedehari',			'E1843A'],
 			['EliteMasterEric',		'psych/mastereric',			'Runtime Shaders support',										'https://twitter.com/EliteMasterEric',	'FFBD40'],
@@ -105,10 +104,10 @@ class CreditsState extends MusicBeatState
 			['Smokey',				'psych/smokey',				'Sprite Atlas Support',											'https://twitter.com/Smokey_5_',		'483D92'],
 			[''],
 			["Funkin' Crew"],
-			['ninjamuffin99',		'psych/ninjamuffin99',		"Programmer of Friday Night Funkin'",							'https://twitter.com/ninja_muffin99',	'CF2D2D'],
-			['PhantomArcade',		'psych/phantomarcade',		"Animator of Friday Night Funkin'",								'https://twitter.com/PhantomArcade3K',	'FADC45'],
-			['evilsk8r',			'psych/evilsk8r',			"Artist of Friday Night Funkin'",								'https://twitter.com/evilsk8r',			'5ABD4B'],
-			['kawaisprite',			'psych/kawaisprite',		"Composer of Friday Night Funkin'",								'https://twitter.com/kawaisprite',		'378FC7']
+			['ninjamuffin99',		'psych/ninjamuffin99',		'Programmer of Friday Night Funkin\'',							'https://twitter.com/ninja_muffin99',	'CF2D2D'],
+			['PhantomArcade',		'psych/phantomarcade',		'Animator of Friday Night Funkin\'',							'https://twitter.com/PhantomArcade3K',	'FADC45'],
+			['evilsk8r',			'psych/evilsk8r',			'Artist of Friday Night Funkin\'',								'https://twitter.com/evilsk8r',			'5ABD4B'],
+			['kawaisprite',			'psych/kawaisprite',		'Composer of Friday Night Funkin\'',							'https://twitter.com/kawaisprite',		'378FC7']
 		];
 		
 		for(i in pisspoop){

@@ -5366,7 +5366,7 @@ class PlayState extends MusicBeatState
 
 	function getRatings()
 	{
-		var raw:String = EternalFunctions.readData('ratings').replace(' || ', '||');
+		var raw:String = CoolUtil.readData('ratings').replace(' || ', '||');
 		var ratings:Array<String> = raw.split('\n');
 		
 		for (i in 0...ratings.length)

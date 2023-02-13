@@ -1,2 +1,2 @@
 import Paths;
-import EternalFunctions;
+import CoolUtil;

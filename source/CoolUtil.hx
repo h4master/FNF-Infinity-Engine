@@ -9,9 +9,8 @@ import flixel.system.FlxSound;
 #if sys
 import sys.io.File;
 import sys.FileSystem;
-#else
-import openfl.utils.Assets;
 #end
+import Song.SwagSong;
 
 using StringTools;
 
@@ -137,5 +136,19 @@ class CoolUtil
 		#else
 		FlxG.openURL(site);
 		#end
+	}
+
+	public static function getSwagSong(file:String):SwagSong
+	{
+		var folder:String = Paths.formatToSongPath(PlayState.SONG.song);
+        return Song.loadFromJson(file, folder);
+	}
+
+	public static function readData(file:String):String
+	{
+		if (Assets.exists(Paths.txt(file)))
+            return Assets.getText(Paths.txt(file));
+
+        return null;
 	}
 }
