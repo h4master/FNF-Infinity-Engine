@@ -17,8 +17,8 @@ import flixel.FlxBasic;
 
 #if hscript
 import HScriptHandler as HScript;
-import HScriptHandler.HScriptCallType;
 #end
+import HScriptHandler.HScriptCallType;
 
 class MusicBeatState extends FlxUIState
 {
@@ -72,7 +72,7 @@ class MusicBeatState extends FlxUIState
 			}
 		}
 
-		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
+		Paths.save.data.fullscreen = FlxG.fullscreen;
 
 		super.update(elapsed);
 	}

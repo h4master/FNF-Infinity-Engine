@@ -1426,8 +1426,7 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
-	public function initLuaShader(name:String, ?glslVersion:Int = 120)
-	{
+	public function initLuaShader(name:String, ?glslVersion:Int = 120)	{
 		if(!ClientPrefs.shaders) return false;
 
 		if(runtimeShaders.exists(name))
@@ -1476,6 +1475,10 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 	#end
+
+	public function initRuntimeLua(script:String) {
+		luaArray.push(new FunkinLua(script));
+	}
 
 	function set_songSpeed(value:Float):Float
 	{

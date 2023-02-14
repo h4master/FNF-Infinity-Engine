@@ -17,6 +17,8 @@ import flixel.text.FlxText;
 
 class StageEditorState extends MusicBeatState
 {
+    var script:String = "function onCreatePost() \n";
+
     var camFollow:FlxObject;
     
     var holdSprite:Array<Dynamic> = [null, 0, 0]; // sprite, offsetX, offsetY
@@ -60,7 +62,7 @@ class StageEditorState extends MusicBeatState
 		camFollow.screenCenter();
 		add(camFollow);
         FlxG.camera.follow(camFollow);
-
+/*
         var tabs = [
 			{name: 'Sprites', label: 'Sprites'}
 		];
@@ -73,6 +75,8 @@ class StageEditorState extends MusicBeatState
 		add(UI_box);
 
         addSpriteUI();
+*/
+        FlxG.camera.zoom = 1;
     }
 
     function addSpriteUI()
@@ -129,15 +133,13 @@ class StageEditorState extends MusicBeatState
     override function update(elapsed:Float)
     {
         spriteControl();
-
+/*
         typing = (
             tagInputText.hasFocus
             || texInputText.hasFocus
-            /* || xNumericStepper.hasFocus || yNumericStepper.hasFocus
             || scaleNumericStepper.hasFocus 
-            || scrollXNumericStepper.hasFocus || scrollYNumericStepper.hasFocus */
         );
-
+*/
         if ((FlxG.keys.pressed.I || FlxG.keys.pressed.J || FlxG.keys.pressed.K || FlxG.keys.pressed.L) && !typing)
 		{
 			var addToCam:Float = 500 * elapsed;
@@ -154,6 +156,21 @@ class StageEditorState extends MusicBeatState
 			else if (FlxG.keys.pressed.L && !typing)
 				camFollow.x += addToCam;
 		}
+
+        if ((FlxG.keys.justPressed.CONTROL && FlxG.keys.pressed.S) || (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S))
+        {
+            for (i in 0...sprites.length)
+            {
+                script += '
+                    makeLuaSprite("sprite-$i", "' + sprites[i].texture + '", ' + sprites[i].x + ', ' + sprites[i].y + ')
+                    setScrollFactor("sprite-$i", ' + sprites[i].scrollFactor.x + ', ' + sprites[i].scrollFactor.y + ')
+                    scaleObject("sprite-$i", ' + sprites[i].lastScale + ', ' + sprites[i].lastScale + ')
+                    addLuaSprite("sprite-$i") \n
+                ';
+            }
+
+            trace(script + "end");
+        }
 
         if (FlxG.keys.justPressed.ESCAPE && !typing)
             MusicBeatState.switchState(new editors.MasterEditorMenu());
@@ -178,6 +195,13 @@ class StageEditorState extends MusicBeatState
         }
         if (mos.justReleased)
             holdSprite = [null, 0, 0];
+
+        if (FlxG.keys.justPressed.N)
+        {
+            var sprite:StageSprite = new StageSprite();
+            sprite.loadGraphic(Paths.image('icons/icon-face'));
+            addSprite(sprite);
+        }
         
         if (holdSprite[0] != null)
         {
@@ -278,6 +302,7 @@ class StageSprite extends FlxSprite
 {
     public var tag:String = "sprite";
     public var lastScale:Float = 1;
+    public var texture:String = 'icons/icon-face';
 
     public function new(x:Float = 0, y:Float = 0) {
         super(x, y);
