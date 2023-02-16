@@ -11,7 +11,6 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.Lib;
 
-
 #if gl_stats
 import openfl.display._internal.stats.Context3DStats;
 import openfl.display._internal.stats.DrawCallContext;

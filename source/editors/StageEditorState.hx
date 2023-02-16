@@ -5,6 +5,11 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxG;
 
+import flixel.FlxCamera;
+#if desktop
+import Discord.DiscordClient;
+#end
+
 // UI
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
@@ -20,6 +25,7 @@ class StageEditorState extends MusicBeatState
     var script:String = "function onCreatePost() \n";
 
     var camFollow:FlxObject;
+    var camEditor:FlxCamera;
     
     var holdSprite:Array<Dynamic> = [null, 0, 0]; // sprite, offsetX, offsetY
     var copySprite:StageSprite = null;
@@ -40,92 +46,85 @@ class StageEditorState extends MusicBeatState
 
     // ui
     var UI_box:FlxUITabMenu;
-    
-    var tagInputText:FlxUIInputText;
     var texInputText:FlxUIInputText;
 
-    var xNumericStepper:FlxUINumericStepper;
-    var yNumericStepper:FlxUINumericStepper;
-
-    var scaleNumericStepper:FlxUINumericStepper;
-
-    var scrollXNumericStepper:FlxUINumericStepper;
-    var scrollYNumericStepper:FlxUINumericStepper;
-
-    var spritesDropDownMenu:FlxUIDropDownMenuCustom; // Криптел, сделай ты, я не могу с этим разобраться
+    var defaultCharacterOffsets:Array<Array<Float>> = [
+        [400, 130], // gf
+        [100, 100], // dad
+        [770, 100] // boyfriend
+    ];
+    var gfOffsets:Array<Float> = [0, 0];
+    var dadOffsets:Array<Float> = [0, 0];
+    var boyfriendOffsets:Array<Float> = [0, 350];
 
     override function create()
     {
         FlxG.mouse.visible = true;
 
+        #if desktop
+        DiscordClient.changePresence("In Stage Editor", null);
+        #end
+
+        camEditor = new FlxCamera();
+        camEditor.bgColor.alpha = 0;
+        FlxG.cameras.add(camEditor, false);
+
         camFollow = new FlxObject(0, 0, 2, 2);
 		camFollow.screenCenter();
 		add(camFollow);
         FlxG.camera.follow(camFollow);
-/*
+
+        var gf = new StageSprite();
+        gf.tag = 'gf';
+        gf.x = defaultCharacterOffsets[0][0] + gfOffsets[0];
+        gf.y = defaultCharacterOffsets[0][1] + gfOffsets[1];
+        gf.frames = Paths.getSparrowAtlas('characters/GF_assets');
+        gf.animation.addByIndices('idle', 'GF Dancing Beat', [0], '');
+        gf.animation.play('idle');
+        gf.scrollFactor.set(0.95, 0.95);
+        addSprite(gf);
+
+        var dad = new StageSprite();
+        dad.tag = 'dad';
+        dad.x = defaultCharacterOffsets[1][0] + dadOffsets[0];
+        dad.y = defaultCharacterOffsets[1][1] + dadOffsets[1];
+        dad.frames = Paths.getSparrowAtlas('characters/DADDY_DEAREST');
+        dad.animation.addByIndices('idle', 'Dad idle dance', [0], '');
+        dad.animation.play('idle');
+        addSprite(dad);
+
+        var boyfriend = new StageSprite();
+        boyfriend.tag = 'boyfriend';
+        boyfriend.x = defaultCharacterOffsets[2][0] + boyfriendOffsets[0];
+        boyfriend.y = defaultCharacterOffsets[2][1] + boyfriendOffsets[1];
+        boyfriend.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+        boyfriend.animation.addByIndices('idle', 'BF idle dance', [0], '');
+        boyfriend.animation.play('idle');
+        addSprite(boyfriend);
+
         var tabs = [
 			{name: 'Sprites', label: 'Sprites'}
 		];
 
 		UI_box = new FlxUITabMenu(null, tabs, true);
-		UI_box.resize(250, FlxG.height / 2);
+		UI_box.resize(250, FlxG.height / 6);
 		UI_box.x = FlxG.width - UI_box.width - 25;
 		UI_box.y = FlxG.height - UI_box.height - 25;
 		UI_box.scrollFactor.set();
+        UI_box.cameras = [camEditor];
 		add(UI_box);
-
         addSpriteUI();
-*/
+
         FlxG.camera.zoom = 1;
     }
 
     function addSpriteUI()
     {
-		var offsetX:Float = 15;
-        
-        var tab_group = new FlxUI(null, UI_box);
+		var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "Sprites";
-
-        tagInputText = new FlxUIInputText(offsetX, 30, 200, 'sprite', 8);
-/*
-        var addSpriteButton:FlxButton = new FlxButton(texInputText.x + 210, texInputText.y - 3, "Add Sprite", function()
-        {
-            var spr:StageSprite = new StageSprite(xNumericStepper.value, yNumericStepper.value);
-            spr.loadGraphic(Paths.image(texInputText.text));
-            spr.lastScale = scaleNumericStepper.value;
-            addSprite(spr);
-        });
-*/
-        texInputText = new FlxUIInputText(offsetX, tagInputText.y + 35, 200, 'icons/icon-face', 8);
-        var reloadImage:FlxButton = new FlxButton(texInputText.x + 210, texInputText.y - 3, "Reload Image", function() {
-            if (lastSprite != null)
-                lastSprite.loadGraphic(Paths.image(texInputText.text));
-        });
-
-        xNumericStepper = new FlxUINumericStepper(offsetX, texInputText.y + 35, 0.1, 4, 0, 9999, 1);
-        yNumericStepper = new FlxUINumericStepper(xNumericStepper.x + 100, xNumericStepper.y, 0.1, 4, 0, 9999, 1);
-
-        scaleNumericStepper = new FlxUINumericStepper(offsetX, yNumericStepper.y + 100, 0.1, 4, 0, 9999, 1);
-
-        scrollXNumericStepper = new FlxUINumericStepper(offsetX, scaleNumericStepper.y + 35, 0.1, 4, 0, 9999, 1);
-        scrollYNumericStepper = new FlxUINumericStepper(scrollXNumericStepper.x + 100, scrollXNumericStepper.y, 0.1, 4, 0, 9999, 1);
-
-        tab_group.add(new FlxText(offsetX, tagInputText.y - 18, 0, 'Sprite Tag:'));
-        tab_group.add(new FlxText(offsetX, texInputText.y - 18, 0, 'Sprite Texture:'));
-        tab_group.add(new FlxText(offsetX, xNumericStepper.y - 18, 0, 'Sprite X:'));
-        tab_group.add(new FlxText(yNumericStepper.x, yNumericStepper.y - 18, 0, 'Sprite Y:'));
-        tab_group.add(new FlxText(offsetX, scaleNumericStepper.y - 18, 0, 'Sprite Scale:'));
-        tab_group.add(new FlxText(offsetX, scrollXNumericStepper.y - 18, 0, 'Sprite Scroll X:'));
-        tab_group.add(new FlxText(scrollYNumericStepper.x, scrollYNumericStepper.y - 18, 0, 'Sprite Scroll Y:'));
-
-        tab_group.add(tagInputText);
-        // tab_group.add(addSpriteButton);
+        texInputText = new FlxUIInputText(15, 30, 200, '', 8);
+        tab_group.add(new FlxText(15, texInputText.y - 18, 0, 'Sprite Texture:'));
         tab_group.add(texInputText);
-        tab_group.add(xNumericStepper);
-        tab_group.add(yNumericStepper);
-        tab_group.add(scaleNumericStepper);
-        tab_group.add(scrollXNumericStepper);
-        tab_group.add(scrollYNumericStepper);
 
 		UI_box.addGroup(tab_group);
 	}
@@ -133,13 +132,9 @@ class StageEditorState extends MusicBeatState
     override function update(elapsed:Float)
     {
         spriteControl();
-/*
-        typing = (
-            tagInputText.hasFocus
-            || texInputText.hasFocus
-            || scaleNumericStepper.hasFocus 
-        );
-*/
+
+        typing = texInputText.hasFocus;
+
         if ((FlxG.keys.pressed.I || FlxG.keys.pressed.J || FlxG.keys.pressed.K || FlxG.keys.pressed.L) && !typing)
 		{
 			var addToCam:Float = 500 * elapsed;
@@ -157,23 +152,49 @@ class StageEditorState extends MusicBeatState
 				camFollow.x += addToCam;
 		}
 
-        if ((FlxG.keys.justPressed.CONTROL && FlxG.keys.pressed.S) || (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S))
+        var mos = FlxG.mouse;
+        if (mos.x > texInputText.x && mos.x < (texInputText.x + texInputText.width) &&
+            mos.y > texInputText.y && mos.y < (texInputText.y + texInputText.height))
+        {
+            if (mos.justPressed)
+                texInputText.hasFocus = true;
+        }
+        else
+        {
+            if (mos.justPressed)
+                texInputText.hasFocus = false;
+        }
+
+        if (FlxG.keys.justPressed.R)
+        {
+            if (lastSprite != null)
+            {
+                lastSprite.loadGraphic(Paths.image(texInputText.text));
+                lastSprite.texture = texInputText.text;
+            }
+        }
+
+        if ((FlxG.keys.justPressed.CONTROL && FlxG.keys.pressed.S) || (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) && !typing)
         {
             for (i in 0...sprites.length)
             {
-                script += '
-                    makeLuaSprite("sprite-$i", "' + sprites[i].texture + '", ' + sprites[i].x + ', ' + sprites[i].y + ')
-                    setScrollFactor("sprite-$i", ' + sprites[i].scrollFactor.x + ', ' + sprites[i].scrollFactor.y + ')
-                    scaleObject("sprite-$i", ' + sprites[i].lastScale + ', ' + sprites[i].lastScale + ')
-                    addLuaSprite("sprite-$i") \n
-                ';
+                if (sprites[i].tag != 'gf' && sprites[i].tag != 'dad' && sprites[i].tag != 'boyfriend')
+                    script += '
+                        makeLuaSprite("sprite-$i", "' + sprites[i].texture + '", ' + sprites[i].x + ', ' + sprites[i].y + ')
+                        setScrollFactor("sprite-$i", ' + sprites[i].scrollFactor.x + ', ' + sprites[i].scrollFactor.y + ')
+                        scaleObject("sprite-$i", ' + sprites[i].scale.x + ', ' + sprites[i].scale.y + ')
+                        addLuaSprite("sprite-$i") \n
+                    ';
             }
 
             trace(script + "end");
         }
 
         if (FlxG.keys.justPressed.ESCAPE && !typing)
+        {
             MusicBeatState.switchState(new editors.MasterEditorMenu());
+            FlxG.sound.music.play(Paths.music('freakymenu'));
+        }
     }
 
     function spriteControl()
@@ -196,10 +217,15 @@ class StageEditorState extends MusicBeatState
         if (mos.justReleased)
             holdSprite = [null, 0, 0];
 
-        if (FlxG.keys.justPressed.N)
+        if (FlxG.keys.justPressed.N && !typing)
         {
-            var sprite:StageSprite = new StageSprite();
-            sprite.loadGraphic(Paths.image('icons/icon-face'));
+            var sprite = new StageSprite();
+            sprite.loadGraphic(Paths.image(texInputText.text));
+            sprite.texture = texInputText.text;
+            /*
+            sprite.scale.x = scaleNumericStepper.value;
+            sprite.scale.y = scaleNumericStepper.value;
+            */
             addSprite(sprite);
         }
         
@@ -210,26 +236,43 @@ class StageEditorState extends MusicBeatState
             spr.x = mos.x - holdSprite[1];
             spr.y = mos.y - holdSprite[2];
 
-            if (spr.x <= -spr.width)
-                spr.x = 0;
-            else if (spr.x >= FlxG.width + spr.width)
-                spr.x = FlxG.width - spr.x;
-
-            if (spr.y <= -spr.height)
-                spr.y = 0;
-            else if (spr.y >= FlxG.height + spr.height)
-                spr.y = FlxG.height - spr.height;
+            switch(spr.tag)
+            {
+                case 'gf':
+                    defaultCharacterOffsets[0] = [
+                        spr.x + gfOffsets[0],
+                        spr.y + gfOffsets[1]
+                    ];
+                case 'dad':
+                    defaultCharacterOffsets[1] = [
+                        spr.x + dadOffsets[0],
+                        spr.y + dadOffsets[1]
+                    ];
+                case 'boyfriend':
+                    defaultCharacterOffsets[2] = [
+                        spr.x + boyfriendOffsets[0],
+                        spr.y + boyfriendOffsets[1]
+                    ];
+            }
 
             if (FlxG.mouse.wheel != 0)
             {
-                if (FlxG.keys.pressed.ALT && !typing)
+                if (spr.tag != 'gf' && spr.tag != 'dad' && spr.tag != 'boyfriend')
                 {
-                    spr.scrollFactor.x += (FlxG.mouse.wheel * 0.05);
-                    spr.scrollFactor.y += (FlxG.mouse.wheel * 0.05);
-                }
-                else
-                {
-                    spr.lastScale += (FlxG.mouse.wheel * 0.05);
+                    if (FlxG.keys.pressed.ALT && !typing)
+                    {
+                        spr.scrollFactor.x += (FlxG.mouse.wheel * 0.05);
+                        spr.scrollFactor.y += (FlxG.mouse.wheel * 0.05);
+                    }
+                    else if (FlxG.keys.pressed.SHIFT)
+                    {
+                        changeSpriteOrder(spr, spr.order + FlxG.mouse.wheel);
+                    }
+                    else
+                    {
+                        spr.scale.x += (FlxG.mouse.wheel * 0.05);
+                        spr.scale.y += (FlxG.mouse.wheel * 0.05);
+                    }
                 }
 
                 spr.updateHitbox();
@@ -237,29 +280,38 @@ class StageEditorState extends MusicBeatState
 
             if (FlxG.keys.justPressed.W || FlxG.keys.justPressed.S && !typing)
             {
-                if (FlxG.keys.justPressed.W && !typing)
+                if (spr.tag != 'gf' && spr.tag != 'dad' && spr.tag != 'boyfriend')
                 {
-                    
-                    if (FlxG.keys.pressed.ALT && !typing)
+                    if (FlxG.keys.justPressed.W && !typing)
+                    {
+                        
+                        if (FlxG.keys.pressed.ALT && !typing)
                         {
-                        spr.scrollFactor.x += 0.1;
-                        spr.scrollFactor.y += 0.1;
+                            spr.scrollFactor.x += 0.1;
+                            spr.scrollFactor.y += 0.1;
+                        }
+                        else if (FlxG.keys.pressed.SHIFT && !typing)
+                            changeSpriteOrder(spr, spr.order + 1);
+                        else
+                        {
+                            spr.scale.x += 0.1;
+                            spr.scale.y += 0.1;
+                        }
                     }
-                    else
+                    if (FlxG.keys.justPressed.S && !typing)
                     {
-                        spr.lastScale += 0.1;
-                    }
-                }
-                if (FlxG.keys.justPressed.S && !typing)
-                {
-                    if (FlxG.keys.pressed.ALT && !typing)
-                    {
-                        spr.scrollFactor.x -= 0.1;
-                        spr.scrollFactor.y -= 0.1;
-                    }
-                    else
-                    {
-                        spr.lastScale -= 0.1;
+                        if (FlxG.keys.pressed.ALT && !typing)
+                        {
+                            spr.scrollFactor.x -= 0.1;
+                            spr.scrollFactor.y -= 0.1;
+                        }
+                        else if (FlxG.keys.pressed.SHIFT && !typing)
+                            changeSpriteOrder(spr, spr.order - 1);
+                        else
+                        {
+                            spr.scale.x -= 0.1;
+                            spr.scale.y -= 0.1;
+                        }
                     }
                 }
 
@@ -267,7 +319,7 @@ class StageEditorState extends MusicBeatState
             }
             
             if (((FlxG.keys.justPressed.CONTROL && FlxG.keys.pressed.C) || (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.C)) && !typing)
-            copySprite = holdSprite[0];
+                copySprite = holdSprite[0];
 
             if (((FlxG.keys.justPressed.CONTROL && FlxG.keys.pressed.V) || (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.V)) && !typing)
             {
@@ -280,37 +332,51 @@ class StageEditorState extends MusicBeatState
                 add(spr);
                 sprites.push(spr);
             }
+
+            if (FlxG.keys.justPressed.D)
+                removeSprite(spr);
         }
     }
 
-    function addSprite(spr:StageSprite)
+    function addSprite(spr:Dynamic)
     {
-        trace('sprite added: ' + spr.tag);
-        add(spr);
+        trace('sprite added: ${spr.tag}');
+        // add(spr);
+        insert(StageSprite.curOrder, spr);
         sprites.push(spr);
     }
 
-    function removeSprite(spr:StageSprite)
+    function removeSprite(spr:Dynamic)
     {
-        trace('sprite removed: ' + spr.tag);
+        trace('sprite removed: ${spr.tag}');
         remove(spr);
         sprites.remove(spr);
+    }
+
+    function changeSpriteOrder(spr:Dynamic, order:Int)
+    {
+        if (order < 0) order = 0;
+        trace('sprite ordered: ${spr.tag}, order: $order');
+        remove(spr);
+        insert(order, spr);
+        spr.order = order;
     }
 }
 
 class StageSprite extends FlxSprite
 {
-    public var tag:String = "sprite";
-    public var lastScale:Float = 1;
-    public var texture:String = 'icons/icon-face';
+    public var tag:String = "";
+    public var texture:String = '';
+    public var order:Int = 0;
+
+    public static var curOrder:Int = 0;
 
     public function new(x:Float = 0, y:Float = 0) {
         super(x, y);
+        curOrder += 1;
     }
 
-    override function update(elapsed:Float)
-    {
-        scale.x = lastScale;
-        scale.y = lastScale;
+    override function update(elapsed:Float) {
+        antialiasing = ClientPrefs.globalAntialiasing;
     }
 }
