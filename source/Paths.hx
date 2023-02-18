@@ -25,6 +25,15 @@ import flash.media.Sound;
 
 import flixel.util.FlxSave;
 
+import flash.display.Loader;
+import flash.net.URLRequest;
+import openfl.display.Bitmap;
+import flash.events.Event;		
+import flash.events.ProgressEvent;
+import flash.events.SecurityErrorEvent;
+import flash.events.HTTPStatusEvent;
+import flash.events.IOErrorEvent;
+
 using StringTools;
 
 class Paths
@@ -255,6 +264,35 @@ class Paths
 		// streamlined the assets process more
 		var returnAsset:FlxGraphic = returnGraphic(key, library);
 		return returnAsset;
+	}
+
+	// it's didn't work
+	inline static public function urlImage(key:String)
+	{
+		var request = new URLRequest(key);
+		var loader = new Loader();
+		var retVal:Dynamic = null;
+
+		loader.contentLoaderInfo.addEventListener( Event.COMPLETE, function(event:Event) {
+			trace('url opened');
+			retVal = event.target.content;
+		});
+        loader.contentLoaderInfo.addEventListener( Event.OPEN, function(event:Event) {
+			trace('url found');
+		});
+        loader.contentLoaderInfo.addEventListener( ProgressEvent.PROGRESS, function(event:Event) {
+			trace('opening url...');
+		});
+        loader.contentLoaderInfo.addEventListener( SecurityErrorEvent.SECURITY_ERROR, function(event:Event) {
+			trace('security error');
+		});
+        loader.contentLoaderInfo.addEventListener( HTTPStatusEvent.HTTP_STATUS, function(event:Event) {
+		});
+        loader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, function(event:Event) {
+			trace('url io error');
+		});
+        loader.load(request);
+		return retVal;
 	}
 
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String

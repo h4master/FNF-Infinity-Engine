@@ -17,6 +17,8 @@ import flixel.util.FlxStringUtil;
 
 class PauseSubState extends MusicBeatSubstate
 {
+	public static var instance:PauseSubState;
+
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
@@ -36,6 +38,8 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
+		instance = this;
+
 		if(CoolUtil.difficulties.length < 2) menuItemsOG.remove('Change Difficulty'); //No need to change difficulty if there is only one!
 
 		if(PlayState.chartingMode)
@@ -255,12 +259,18 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
 
+					openAddState(new CustomFadeTransition(0.6, false));
+
 					WeekData.loadTheFirstEnabledMod();
-					if(PlayState.isStoryMode) {
-						MusicBeatState.switchState(new StoryMenuState());
-					} else {
-						MusicBeatState.switchState(new FreeplayState());
-					}
+					if(PlayState.isStoryMode)
+						CustomFadeTransition.finishCallback = function() {
+							MusicBeatState.switchState(new StoryMenuState());
+						}
+					else
+						CustomFadeTransition.finishCallback = function() {
+							MusicBeatState.switchState(new FreeplayState());
+						}
+
 					PlayState.cancelMusicFadeTween();
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 					PlayState.changedDifficulty = false;
@@ -294,7 +304,10 @@ class PauseSubState extends MusicBeatSubstate
 		}
 		else
 		{
-			MusicBeatState.resetState();
+			instance.openAddState(new CustomFadeTransition(0.6, false));
+			CustomFadeTransition.finishCallback = function() {
+				MusicBeatState.resetState();
+			}
 		}
 	}
 

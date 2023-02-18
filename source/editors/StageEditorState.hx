@@ -193,7 +193,7 @@ class StageEditorState extends MusicBeatState
         if (FlxG.keys.justPressed.ESCAPE && !typing)
         {
             MusicBeatState.switchState(new editors.MasterEditorMenu());
-            FlxG.sound.music.play(Paths.music('freakymenu'));
+            FlxG.sound.playMusic(Paths.music('freakyMenu'));
         }
     }
 

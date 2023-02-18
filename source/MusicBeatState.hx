@@ -15,11 +15,6 @@ import flixel.FlxState;
 import flixel.FlxCamera;
 import flixel.FlxBasic;
 
-#if hscript
-import HScriptHandler as HScript;
-#end
-import HScriptHandler.HScriptCallType;
-
 class MusicBeatState extends FlxUIState
 {
 	private var curSection:Int = 0;
@@ -41,12 +36,9 @@ class MusicBeatState extends FlxUIState
 
 	override function create() {
 		camBeat = FlxG.camera;
-		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		super.create();
 
-		if(!skip) {
-			openSubState(new CustomFadeTransition(0.7, true));
-		}
+		playTransIn();
 		FlxTransitionableState.skipNextTransOut = false;
 	}
 
@@ -130,7 +122,7 @@ class MusicBeatState extends FlxUIState
 		var curState:Dynamic = FlxG.state;
 		var leState:MusicBeatState = curState;
 		if(!FlxTransitionableState.skipNextTransIn) {
-			leState.openSubState(new CustomFadeTransition(0.6, false));
+			leState.openAddState(new CustomFadeTransition(0.6, false));
 			if(nextState == FlxG.state) {
 				CustomFadeTransition.finishCallback = function() {
 					FlxG.resetState();
@@ -181,7 +173,7 @@ class MusicBeatState extends FlxUIState
 	public function openAddState(addState:MusicBeatAddstate)
 	{
 		lastAddState = addState;
-		add(lastAddState);
+		insert(9999, lastAddState);
 	}
 
 	public function closeAddState()
@@ -192,5 +184,11 @@ class MusicBeatState extends FlxUIState
 			remove(lastAddState);
 		}
 		lastAddState = null;
+	}
+
+	private function playTransIn()
+	{
+		if(!FlxTransitionableState.skipNextTransOut)
+			openAddState(new CustomFadeTransition(0.7, true));
 	}
 }

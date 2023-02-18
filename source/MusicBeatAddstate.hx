@@ -65,4 +65,9 @@ class MusicBeatAddstate extends FlxTypedGroup<FlxBasic>
 
 	public function beatHit():Void {
 	}
+
+	public function close() {
+		clear();
+		destroy();
+	}
 }

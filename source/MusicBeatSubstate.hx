@@ -72,7 +72,7 @@ class MusicBeatSubstate extends FlxSubState
 	public function openAddState(addState:MusicBeatAddstate)
 	{
 		lastAddState = addState;
-		add(lastAddState);
+		insert(9999, lastAddState);
 	}
 
 	public function closeAddState()

@@ -14,7 +14,9 @@ import flixel.FlxSubState;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
 
-class CustomFadeTransition extends MusicBeatSubstate {
+class CustomFadeTransition extends MusicBeatAddstate
+{
+	public static var instance:CustomFadeTransition;
 	public static var finishCallback:Void->Void;
 	private var leTween:FlxTween = null;
 	public static var nextCamera:FlxCamera;
@@ -24,6 +26,9 @@ class CustomFadeTransition extends MusicBeatSubstate {
 
 	public function new(duration:Float, isTransIn:Bool) {
 		super();
+		instance = this;
+
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
 		this.isTransIn = isTransIn;
 		var zoom:Float = CoolUtil.boundTo(FlxG.camera.zoom, 0.05, 1);
