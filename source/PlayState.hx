@@ -77,8 +77,8 @@ import vlc.MP4Handler;
 
 #if hscript
 import HScriptHandler as HScript;
-#end
 import HScriptHandler.HScriptCallType;
+#end
 
 using StringTools;
 
@@ -330,6 +330,27 @@ class PlayState extends MusicBeatState
 
 		// for lua
 		instance = this;
+
+		#if hscript
+		hscript = new HScript('PlayState');
+		#end
+		callHScript(CALLBACK, 'PlayState', PlayState);
+		callHScript(CALLBACK, 'add', function(obj:FlxBasic) {
+			add(obj);
+		});
+		callHScript(CALLBACK, 'insert', function(order:Int, obj:FlxBasic) {
+			insert(order, obj);
+		});
+		callHScript(CALLBACK, 'addBehindGF', function(obj:FlxBasic) {
+			addBehindGF(obj);
+		});
+		callHScript(CALLBACK, 'addBehindDad', function(obj:FlxBasic) {
+			addBehindDad(obj);
+		});
+		callHScript(CALLBACK, 'addBehindBF', function(obj:FlxBasic) {
+			addBehindBF(obj);
+		});
+		callHScript(FUNCTION, 'init', []);
 
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
@@ -1392,16 +1413,6 @@ class PlayState extends MusicBeatState
 		
 		CustomFadeTransition.nextCamera = camOther;
 
-		#if hscript
-		hscript = new HScript('PlayState');
-		#end
-		callHScript(CALLBACK, 'PlayState', PlayState);
-		callHScript(CALLBACK, 'add', function(obj:FlxBasic) {
-			add(obj);
-		});
-		callHScript(CALLBACK, 'insert', function(order:Int, obj:FlxBasic) {
-			insert(order, obj);
-		});
 		callHScript(FUNCTION, 'create', []);
 	}
 
@@ -2266,15 +2277,15 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function addBehindGF(obj:FlxObject)
+	public function addBehindGF(obj:FlxBasic)
 	{
 		insert(members.indexOf(gfGroup), obj);
 	}
-	public function addBehindBF(obj:FlxObject)
+	public function addBehindBF(obj:FlxBasic)
 	{
 		insert(members.indexOf(boyfriendGroup), obj);
 	}
-	public function addBehindDad (obj:FlxObject)
+	public function addBehindDad (obj:FlxBasic)
 	{
 		insert(members.indexOf(dadGroup), obj);
 	}
@@ -2414,6 +2425,17 @@ class PlayState extends MusicBeatState
 		// Updating Discord Rich Presence (with Time Left)
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength);
 		#end
+
+		var songTab = new SongTab(
+			FlxColor.fromRGB(
+				PlayState.instance.dad.healthColorArray[0],
+				PlayState.instance.dad.healthColorArray[1],
+				PlayState.instance.dad.healthColorArray[2]
+			),
+			SONG.song
+		);
+		add(songTab);
+
 		setOnLuas('songLength', songLength);
 		callOnLuas('onSongStart', []);
 	}
@@ -3365,6 +3387,32 @@ class PlayState extends MusicBeatState
 			vocals.pause();
 		}
 		openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+		//}
+
+		#if desktop
+		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
+		#end
+	}
+
+	public function openOptionsMenu()
+	{
+		persistentUpdate = false;
+		persistentDraw = true;
+		paused = true;
+
+		// 1 / 1000 chance for Gitaroo Man easter egg
+		/*if (FlxG.random.bool(0.1))
+		{
+			// gitaroo man easter egg
+			cancelMusicFadeTween();
+			MusicBeatState.switchState(new GitarooPause());
+		}
+		else {*/
+		if(FlxG.sound.music != null) {
+			FlxG.sound.music.pause();
+			vocals.pause();
+		}
+		openSubState(new options.OptionsMenu(true));
 		//}
 
 		#if desktop

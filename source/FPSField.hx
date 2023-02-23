@@ -27,12 +27,13 @@ class FPSField extends TextField
 
     public var bitmap:Bitmap;
 
+	public var show:Bool = true;
+
     @:noCompletion private var cacheCount:Int;
 	@:noCompletion private var currentTime:Float;
 	@:noCompletion private var times:Array<Float>;
 
-    // Soon it will work
-    var array:Array<FlxColor> = [
+    var colors:Array<FlxColor> = [
 		FlxColor.fromRGB(148, 0, 211),
 		FlxColor.fromRGB(75, 0, 130),
 		FlxColor.fromRGB(0, 0, 255),
@@ -41,23 +42,25 @@ class FPSField extends TextField
 		FlxColor.fromRGB(255, 127, 0),
 		FlxColor.fromRGB(255, 0, 0)
 	];
-
     var skippedFrames = 0;
 
 	public static var currentColor = 0;
 
     var fpsLine:String = "";
     var memLine:String = "";
+	var waterLine:String = "";
     
     public function new()
     {
         super();
-        this.x = 10;
-        this.y = 3;
         currentFPS = 0;
 
         defaultTextFormat = new TextFormat(
+			#if desktop
             Paths.font('vcr.ttf'),
+			#else
+			"_sans",
+			#end
             14,
             FlxColor.WHITE
         );
@@ -102,21 +105,19 @@ class FPSField extends TextField
 
 		if (currentCount != cacheCount /*&& visible*/)
 		{
-			fpsLine = "FPS: " + currentFPS;
-			var memoryMegas:Float = 0;
-			
-			#if openfl
-			memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 1));
-            // memLine = "\nMemory: " + memoryMegas + " MB";
-			#end
+			if (ClientPrefs.showFPS)
+				fpsLine = 'FPS: $currentFPS \n';
+			else
+				fpsLine = "";
+
+			if (ClientPrefs.showWM)
+				waterLine = 'Infinity v${Main.game.version} \n';
+			else
+				waterLine = "";
 
 			textColor = 0xFFFFFFFF;
-			if (memoryMegas > 3000 || currentFPS <= ClientPrefs.framerate / 2)
-			{
-				textColor = 0xFFFF0000;
-			}
 
-            text = fpsLine + memLine;
+            text = fpsLine + memLine + waterLine;
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();
@@ -129,12 +130,30 @@ class FPSField extends TextField
 
         Main.instance.removeChild(bitmap);
         visible = true;
+
         if (ClientPrefs.outlineFPS)
         {
-            text = fpsLine + memLine + "0";
+			this.x = 8;
+			this.y = 1;
+
+            text = fpsLine + memLine + waterLine;
             bitmap = ImageOutline.renderImage(this, 2, 0x000000, 1);
             Main.instance.addChild(bitmap);
             visible = false;
         }
+		else
+		{
+			this.x = 10;
+			this.y = 3;
+		}
+
+		var memoryMegas:Float = 0;
+		#if openfl
+		memoryMegas = Math.abs(FlxMath.roundDecimal(System.totalMemory / 1000000, 0));
+		if (ClientPrefs.showMem)
+			memLine = 'Memory: $memoryMegas MB \n';
+		else
+			memLine = "";
+		#end
 	}
 }

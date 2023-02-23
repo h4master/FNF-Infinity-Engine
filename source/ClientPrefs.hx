@@ -11,7 +11,9 @@ class ClientPrefs {
 	public static var middleScroll:Bool = false;
 	public static var opponentStrums:Bool = true;
 	public static var showFPS:Bool = true;
-	public static var outlineFPS:Bool = true;
+	public static var showMem:Bool = true;
+	public static var showWM:Bool = false;
+	public static var outlineFPS:Bool = false;
 	public static var flashing:Bool = true;
 	public static var globalAntialiasing:Bool = true;
 	public static var noteSplashes:Bool = true;
@@ -29,6 +31,7 @@ class ClientPrefs {
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
 	public static var healthBarAlpha:Float = 1;
+	public static var songTab:Bool = true;
 	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
@@ -99,6 +102,8 @@ class ClientPrefs {
 		Paths.save.data.middleScroll = middleScroll;
 		Paths.save.data.opponentStrums = opponentStrums;
 		Paths.save.data.showFPS = showFPS;
+		Paths.save.data.showMem = showMem;
+		Paths.save.data.showWM = showWM;
 		Paths.save.data.outlineFPS = outlineFPS;
 		Paths.save.data.flashing = flashing;
 		Paths.save.data.globalAntialiasing = globalAntialiasing;
@@ -117,6 +122,7 @@ class ClientPrefs {
 		Paths.save.data.scoreZoom = scoreZoom;
 		Paths.save.data.noReset = noReset;
 		Paths.save.data.healthBarAlpha = healthBarAlpha;
+		Paths.save.data.songTab = songTab;
 		Paths.save.data.comboOffset = comboOffset;
 		Paths.save.data.achievementsMap = Achievements.achievementsMap;
 		Paths.save.data.henchmenDeath = Achievements.henchmenDeath;
@@ -145,12 +151,12 @@ class ClientPrefs {
 			middleScroll = Paths.save.data.middleScroll;
 		if(Paths.save.data.opponentStrums != null)
 			opponentStrums = Paths.save.data.opponentStrums;
-		if(Paths.save.data.showFPS != null) {
+		if(Paths.save.data.showFPS != null)
 			showFPS = Paths.save.data.showFPS;
-			if(Main.fpsVar != null) {
-				Main.fpsVar.visible = showFPS;
-			}
-		}
+		if (Paths.save.data.showMem != null)
+			showMem = Paths.save.data.showMem;
+		if (Paths.save.data.showWM != null)
+			showWM = Paths.save.data.showWM;
 		if(Paths.save.data.outlineFPS != null)
 			outlineFPS = Paths.save.data.outlineFPS;
 		if(Paths.save.data.flashing != null)
@@ -198,6 +204,8 @@ class ClientPrefs {
 			noReset = Paths.save.data.noReset;
 		if(Paths.save.data.healthBarAlpha != null)
 			healthBarAlpha = Paths.save.data.healthBarAlpha;
+		if(Paths.save.data.songTab != null)
+			songTab = Paths.save.data.songTab;
 		if(Paths.save.data.comboOffset != null)
 			comboOffset = Paths.save.data.comboOffset;
 		

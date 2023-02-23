@@ -348,10 +348,6 @@ class Paths
 		return false;
 	}
 
-	inline static public function getExtraSparrow(key:String):FlxAtlasFrames {
-		return FlxAtlasFrames.fromSparrow('extra/images/$key', File.getContent('extra/images/$key'));
-	}
-
 	inline static public function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames
 	{
 		#if MODS_ALLOWED

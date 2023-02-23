@@ -14,7 +14,7 @@ import flixel.FlxSubState;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
 
-class CustomFadeTransition extends MusicBeatAddstate
+class CustomFadeTransition extends MusicBeatSubstate
 {
 	public static var instance:CustomFadeTransition;
 	public static var finishCallback:Void->Void;
@@ -50,6 +50,9 @@ class CustomFadeTransition extends MusicBeatAddstate
 			FlxTween.tween(transGradient, {y: transGradient.height + 50}, duration, {
 				onComplete: function(twn:FlxTween) {
 					close();
+					if(finishCallback != null) {
+						finishCallback();
+					}
 				},
 			ease: FlxEase.linear});
 		} else {

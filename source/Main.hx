@@ -29,14 +29,16 @@ using StringTools;
 
 class Main extends Sprite
 {
-	var game = {
+	public static var game = {
 		width: 1280, // WINDOW width
 		height: 720, // WINDOW height
 		initialState: TitleState, // initial game state
 		zoom: -1.0, // game state bounds
 		framerate: 60, // default framerate
 		skipSplash: true, // if the default flixel splash screen should be skipped
-		startFullscreen: false // if the game should start at fullscreen mode
+		startFullscreen: false, // if the game should start at fullscreen mode
+
+		version: "0.1.0" // infinity engine version
 	};
 
 	public static var instance:Main;

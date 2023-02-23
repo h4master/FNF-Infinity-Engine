@@ -8,6 +8,11 @@ import flixel.util.FlxColor;
 import flash.display.BitmapData;
 import editors.ChartingState;
 
+#if hscript
+import HScriptHandler as HScript;
+import HScriptHandler.HScriptCallType;
+#end
+
 using StringTools;
 
 typedef EventNote = {
@@ -95,6 +100,10 @@ class Note extends FlxSprite
 
 	public var hitsoundDisabled:Bool = false;
 
+	#if hscript
+	public var hscript:HScript;
+	#end
+
 	private function set_multSpeed(value:Float):Float {
 		resizeByRatio(value / multSpeed);
 		multSpeed = value;
@@ -158,12 +167,23 @@ class Note extends FlxSprite
 		noteSplashHue = colorSwap.hue;
 		noteSplashSat = colorSwap.saturation;
 		noteSplashBrt = colorSwap.brightness;
+
+		#if hscript
+		hscript.call(FUNCTION, 'set_notetype', [value]);
+		#end
+
 		return value;
 	}
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)
 	{
 		super();
+
+		#if hscript
+		hscript = new HScript('Note');
+		hscript.call(CALLBACK, 'this', this);
+		hscript.call(FUNCTION, 'init', []);
+		#end
 
 		if (prevNote == null)
 			prevNote = this;
@@ -243,6 +263,10 @@ class Note extends FlxSprite
 			earlyHitMult = 1;
 		}
 		x += offsetX;
+
+		#if hscript
+		hscript.call(FUNCTION, 'new', [strumTime, noteData, prevNote, sustainNote, inEditor]);
+		#end
 	}
 
 	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;

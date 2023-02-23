@@ -122,6 +122,7 @@
 	-->
 	<assets path="assets/fonts"/>
 	<assets path="extra" embed = 'true'/>
+	<assets path='extra/dlls' rename='' />
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="infinity-stuff" />

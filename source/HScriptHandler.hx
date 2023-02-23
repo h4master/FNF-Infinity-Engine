@@ -1,16 +1,9 @@
 package;
 
 import hscript.*;
-import sys.io.File;
-import sys.FileSystem;
-import lime.utils.Assets;
+import flixel.FlxBasic;
 
 using StringTools;
-
-typedef ImportShit = {
-	var library:String;
-	var like:String;
-}
 
 enum HScriptCallType
 {
@@ -18,12 +11,13 @@ enum HScriptCallType
 	FUNCTION;
 }
 
-class HScriptHandler
+class HScriptHandler extends FlxBasic
 {
 	public static var parser:Parser = new Parser();
 	public var interp:Interp;
 
 	public var variables(get, never):Map<String, Dynamic>;
+	public var functions:Map<String, Dynamic>;
 
 	public function get_variables()
 	{
@@ -32,12 +26,10 @@ class HScriptHandler
 
 	public function new(file:String)
 	{
+		super();
 		interp = new Interp();
-		if (FileSystem.exists(Paths.getPreloadPath('not_source/' + file + '.hx')) #if MODS_ALLOWED || FileSystem.exists(Paths.modFolders('not_source/' + file + '.hx')) #end)
-		{
-			execute(Paths.getTextFromFile('not_source/' + file + '.hx'));
-			trace('HScript loaded succesfully: ' + file);
-		}
+		execute(Paths.getTextFromFile('not_source/' + file + '.hx'));
+		// trace('HScript loaded succesfully: ' + file);
 		addCallbacks();
 	}
 
@@ -92,7 +84,7 @@ class HScriptHandler
 			['BGSprite'],
 			['BlendModeEffect'],
 			['Boyfriend'],
-			['ButtonRemapSubstate'],
+			['BuildData'],
 			['Character'],
 			['ChartParser'],
 			['CheckboxThingie'],
@@ -107,14 +99,20 @@ class HScriptHandler
 			['DialogueBox'],
 			['DialogueBoxPsych'],
 			['Discord'],
-			['EternalFunctions'],
 			['FlashingState'],
 			['FlxUIDropDownMenuCustom'],
+			['FPSField'],
 			['FreeplayState'],
 			['FunkinLua'],
+			['GameOverSubstate'],
+			['GameplayChangersSubstate'],
+			['GitarooPause'],
+			['HealthIcon'],
+			['Highscore'],
+			['Hitbox'],
 			['HScriptHandler'],
+			['ImageOutline'],
 			['InputFormatter'],
-			['LatencyState'],
 			['LoadingState'],
 			['Main'],
 			['MainMenuState'],
@@ -171,17 +169,27 @@ class HScriptHandler
 		});
 		*/
 
-		call(CALLBACK, 'import', function(lib:String)
+		call(CALLBACK, 'import', function(lib:String, like:String = null)
 		{
-			var libShit:Array<String> = lib.split(' as ');
-			var libPack:Array<String> = libShit[0].split('.');
+			var libPack:Array<String> = lib.split('.');
 			var libName:String = libPack[libPack.length - 1];
 			
-			if (libShit.length == 2)
-				libName = libShit[1];
+			if (like != null && like != '')
+				libName = like;
 
 			try
-				call(CALLBACK, libName, Type.resolveClass(libShit[0]));
+				call(CALLBACK, libName, Type.resolveClass(lib));
+		});
+
+		call(CALLBACK, 'initHaxeModule', function(file:String, args:Array<Dynamic>)
+		{
+			try
+			{
+				var hscript = new HScriptHandler(file);
+				hscript.call(FUNCTION, 'init', args);
+			}
+			catch(e)
+				trace('Error on HScript! $e');
 		});
 	}
 }
